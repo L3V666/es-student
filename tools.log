@@ -1,0 +1,9 @@
+git version 2.55.0
+Python 3.14.7
+cmake version 4.3.0
+GNU Make 4.4.1
+arm-none-eabi-gcc (Fedora 15.2.0-4.fc44) 15.2.0
+code 1.136.0
+picotool v2.3.0 (Linux, GNU-11.4.0, Release)
+pico-sdk 2.3.0
+PICO_SDK_PATH=/home/l3v/repo/pico/pico-sdk

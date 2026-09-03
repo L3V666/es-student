@@ -1,0 +1,7 @@
+/home/l3v/repo/pico/112-blink/build/_deps/picotool/picotool
+/home/l3v/repo/pico/112-blink/build/_deps/picotool/picotoolTargets.cmake
+/home/l3v/repo/pico/112-blink/build/_deps/picotool/picotoolTargets-release.cmake
+/home/l3v/repo/pico/112-blink/build/_deps/picotool/picotoolConfig.cmake
+/home/l3v/repo/pico/112-blink/build/_deps/picotool/picotoolConfigVersion.cmake
+/home/l3v/repo/pico/112-blink/build/_deps/picotool/enc_bootloader.elf
+/home/l3v/repo/pico/112-blink/build/_deps/picotool/enc_bootloader_mbedtls.elf
