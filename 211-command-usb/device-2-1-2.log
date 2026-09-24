@@ -3,20 +3,25 @@
 устройство: 2e8a:000a
 серийный номер: E66098F29B6A7732
 порт: /dev/ttyACM0
-начало: 2026-09-24T16:26:33
+начало: 2026-09-24T16:36:00
    0.000 --> enable
-   0.138 <-- enable
-   0.138 <-- inf cmd_enable:26 led on
-   2.140 --> disable
-   2.299 <-- disable
-   2.299 <-- inf cmd_disable:32 led off
-   4.302 --> info
-   4.399 <-- info
-   4.400 <-- device: es-led-module 1.0.0, built Sep 24 2026 16:05:43, log level 2
-   6.403 --> ping
-   6.500 <-- ping
-   6.500 <-- pong
-   8.503 --> nosuchcommand
-   8.780 <-- nosuchcommand
-   8.781 <-- err handle_command:81 unknown command: nosuchcommand
-итог: отправлено команд 5, принято строк 10
+   0.128 <-- enable
+   0.128 <-- inf cmd_enable:26 led on
+   2.131 --> disable
+   2.288 <-- disable
+   2.288 <-- inf cmd_disable:32 led off
+   4.291 --> info
+   4.389 <-- info
+   4.389 <-- project: 211-command-usb
+   4.390 <-- repo: https://github.com/L3V666/es-student
+   4.390 <-- board: pico
+   4.390 <-- serial: E66098F29B6A7732
+   4.391 <-- chip: manufacturer 0x927, part 0x0002, revision 1
+   4.391 <-- pico-sdk: 2.3.0
+   6.394 --> ping
+   6.490 <-- ping
+   6.490 <-- pong
+   8.493 --> nosuchcommand
+   8.770 <-- nosuchcommand
+   8.771 <-- err handle_command:81 unknown command: nosuchcommand
+итог: отправлено команд 5, принято строк 15
