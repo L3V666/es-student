@@ -6,6 +6,7 @@
 #include "log.h"
 #include "device.h"
 #include "memory.h"
+#include "command.h"
 #include <string.h>
 
 const uint BUTTON_PIN = 15;
@@ -18,8 +19,6 @@ bool get_button_debounce(uint pin)
     sleep_ms(DEBOUNCE_MS);
     return state && gpio_get(pin);
 }
-
-typedef void (*command_handler_t)(void);
 
 void cmd_enable(void)
 {
@@ -53,11 +52,10 @@ void cmd_mem_info(void)
     mem_info();
 }
 
-struct command_t
+void cmd_fw_info(void)
 {
-    const char *name;
-    command_handler_t handler;
-};
+    fw_info();
+}
 
 const struct command_t commands[] = {
     { "enable", cmd_enable },
@@ -66,13 +64,14 @@ const struct command_t commands[] = {
     { "version", cmd_version },
     { "ping", cmd_ping },
     { "mem_info", cmd_mem_info },
+    { "fw_info", cmd_fw_info },
 };
 
-#define COMMAND_COUNT (sizeof(commands) / sizeof(commands[0]))
+const uint command_count = sizeof(commands) / sizeof(commands[0]);
 
 void handle_command(const char *command)
 {
-    for (uint i = 0; i < COMMAND_COUNT; i++)
+    for (uint i = 0; i < command_count; i++)
     {
         if (strcmp(command, commands[i].name) == 0)
         {

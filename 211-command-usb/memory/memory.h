@@ -2,5 +2,6 @@
 #define MEMORY_H
 
 void mem_info(void);
+void fw_info(void);
 
 #endif
