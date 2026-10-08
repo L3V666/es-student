@@ -2,6 +2,36 @@
 #include "pico/stdlib.h"
 #include "hardware/clocks.h"
 #include "clock.h"
+#include "log.h"
+
+const uint32_t CLK_SYS_LOW_KHZ = 62500;
+
+// В SDK (src/rp2_common/hardware_clocks/clocks.c) set_sys_clock_khz()
+// вызывает set_sys_clock_pll(), которая при значении по умолчанию
+// PICO_CLOCK_ADJUST_PERI_CLOCK_WITH_SYS_CLOCK = 0 переводит clk_peri
+// на PLL USB, 48 МГц. Поэтому и после возврата SYS_CLK_KHZ clk_peri
+// остаётся на 48 МГц: частоты UART и SPI не зависят от частоты ядра.
+static void clk_sys_set(uint32_t khz)
+{
+    if (set_sys_clock_khz(khz, false))
+    {
+        LOG_INF("clk_sys %u kHz\n", (unsigned)khz);
+    }
+    else
+    {
+        LOG_ERR("clk_sys %u kHz is not set\n", (unsigned)khz);
+    }
+}
+
+void clk_sys_low(void)
+{
+    clk_sys_set(CLK_SYS_LOW_KHZ);
+}
+
+void clk_sys_default(void)
+{
+    clk_sys_set(SYS_CLK_KHZ);
+}
 
 static void row(const char *name, uint32_t set_khz, uint32_t measured_khz)
 {
