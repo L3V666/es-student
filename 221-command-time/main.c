@@ -1,7 +1,4 @@
 #include "pico/stdlib.h"
-#include "hardware/gpio.h"
-#include "hardware/regs/addressmap.h"
-#include "hardware/regs/sio.h"
 #include "led.h"
 #include "log.h"
 #include "device.h"
@@ -10,27 +7,19 @@
 #include "command.h"
 #include <string.h>
 
-const uint BUTTON_PIN = 15;
+const uint BLINK_HALF_PERIOD_MS = 500;
 
-const uint DEBOUNCE_MS = 20;
+uint64_t last_toggle_us = 0;
 
-bool get_button_debounce(uint pin)
+void blink(void)
 {
-    bool state = gpio_get(pin);
-    sleep_ms(DEBOUNCE_MS);
-    return state && gpio_get(pin);
-}
+    uint64_t now_us = time_us_64();
 
-void cmd_enable(void)
-{
-    led_set(true);
-    LOG_INF("led %s\n", led_is_on() ? "on" : "off");
-}
-
-void cmd_disable(void)
-{
-    led_set(false);
-    LOG_INF("led %s\n", led_is_on() ? "on" : "off");
+    if (now_us - last_toggle_us >= BLINK_HALF_PERIOD_MS * 1000)
+    {
+        last_toggle_us = now_us;
+        led_toggle();
+    }
 }
 
 void cmd_info(void)
@@ -73,9 +62,12 @@ void cmd_clk_info(void)
     clk_info();
 }
 
+void cmd_uptime(void)
+{
+    uptime();
+}
+
 const struct command_t commands[] = {
-    { "enable", cmd_enable },
-    { "disable", cmd_disable },
     { "info", cmd_info },
     { "version", cmd_version },
     { "ping", cmd_ping },
@@ -84,6 +76,7 @@ const struct command_t commands[] = {
     { "dev_info", cmd_dev_info },
     { "boot_info", cmd_boot_info },
     { "clk_info", cmd_clk_info },
+    { "uptime", cmd_uptime },
 };
 
 const uint command_count = sizeof(commands) / sizeof(commands[0]);
@@ -143,37 +136,14 @@ void read_line(void)
     }
 }
 
-int main() {
+int main()
+{
     stdio_init_all();
-
-    // включаем стандартный ввод-вывод
-
     led_init();
-
-    gpio_init(BUTTON_PIN);
-    gpio_set_dir(BUTTON_PIN, GPIO_IN);
-    gpio_pull_up(BUTTON_PIN);
-
-    // инициализируем и настраиваем вывод кнопки
-
-    bool previous = false;
-
-    // объявляем переменные
 
     while (1)
     {
-        // читаем состояние пина кнопки с задержкой
-
-        bool current = get_button_debounce(BUTTON_PIN);
-
-        if (previous == true && current == false)
-        {
-            led_toggle();
-            LOG_INF("led %s\n", led_is_on() ? "on" : "off");
-        }
-
-        // запоминаем текущее состояние пина кнопки, как предыдущее
-
+        blink();
         read_line();
     }
 }
