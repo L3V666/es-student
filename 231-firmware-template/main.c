@@ -1,5 +1,6 @@
 #include "pico/stdlib.h"
 #include "led-task.h"
+#include "button-task.h"
 #include "log.h"
 #include "device.h"
 #include "profiling.h"
@@ -10,6 +11,7 @@ int main(void)
 {
     stdio_init_all();
     led_task_init();
+    button_task_init();
     stdio_text_protocol_init();
     LOG_INF("%s %s\n", DEVICE_NAME, FIRMWARE_VERSION);
     profiling_init();
@@ -17,6 +19,7 @@ int main(void)
     while (1)
     {
         profiling_iteration();
+        button_task_handle();
         led_task_handle();
         const command_t *command = stdio_text_protocol_handle();
         if (command != NULL)
