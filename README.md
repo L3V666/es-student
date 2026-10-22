@@ -17,3 +17,5 @@
 [![2.3.3 Кнопка без ожидания](https://github.com/L3V666/es-student/actions/workflows/check-2-3-3.yml/badge.svg)](https://github.com/L3V666/es-student/actions/workflows/check-2-3-3.yml)
 
 [![2.3.4 Расчёт по шагам](https://github.com/L3V666/es-student/actions/workflows/check-2-3-4.yml/badge.svg)](https://github.com/L3V666/es-student/actions/workflows/check-2-3-4.yml)
+
+[![2.3.5 Данные вместо печати](https://github.com/L3V666/es-student/actions/workflows/check-2-3-5.yml/badge.svg)](https://github.com/L3V666/es-student/actions/workflows/check-2-3-5.yml)
