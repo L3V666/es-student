@@ -1,5 +1,6 @@
-#include "button-task.h"
-#include "led-task.h"
+#include "button-task/button-task.h"
+#include "systime/systime.h"
+#include "led-task/led-task.h"
 #include "pico/stdlib.h"
 
 static const uint BUTTON_PIN = 15;
@@ -29,7 +30,7 @@ void button_task_init(void)
 void button_task_handle(void)
 {
     bool pressed = !gpio_get(BUTTON_PIN);
-    uint64_t now_us = time_us_64();
+    uint64_t now_us = systime_us();
 
     switch (button_state)
     {

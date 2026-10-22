@@ -1,5 +1,5 @@
-#include "pi-task.h"
-#include "pico/stdlib.h"
+#include "pi-task/pi-task.h"
+#include "systime/systime.h"
 
 // Один член: около 585 тактов / 125 МГц = 4,68 мкс.
 // 100 членов: около 468 мкс, меньше 0,5 мс; проверить на плате.
@@ -24,7 +24,7 @@ bool pi_task_start(uint32_t terms)
     pi_k = 0;
     pi_sum = 0.0;
     pi_sign = 1.0;
-    start_us = time_us_64();
+    start_us = systime_us();
     pi_state = PI_STATE_RUNNING;
     return true;
 }
@@ -51,7 +51,7 @@ void pi_task_handle(void)
     if (pi_k == pi_n)
     {
         pi_result = 4.0 * pi_sum;
-        finish_us = time_us_64();
+        finish_us = systime_us();
         pi_state = PI_STATE_READY;
     }
 }

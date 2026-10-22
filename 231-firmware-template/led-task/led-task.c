@@ -1,27 +1,10 @@
-#include "led-task.h"
+#include "led-task/led-task.h"
+#include "systime/systime.h"
 #include "pico/stdlib.h"
 
 static led_state_t led_state;
 static uint64_t half_period_us;
 static uint64_t last_toggle_us;
-
-static bool period_elapsed(uint64_t *last_us, uint64_t period_us)
-{
-    uint64_t now_us = time_us_64();
-    if (now_us - *last_us < period_us)
-    {
-        return false;
-    }
-
-    // Сохраняем сетку периода при небольшом опоздании.
-    *last_us += period_us;
-    if (now_us - *last_us >= period_us)
-    {
-        // Пропущенные переключения не догоняем.
-        *last_us = now_us;
-    }
-    return true;
-}
 
 void led_task_init(void)
 {
@@ -45,7 +28,7 @@ void led_task_set_state(led_state_t state)
         break;
     case LED_STATE_BLINK:
         // Первое переключение произойдёт на ближайшем вызове обработчика.
-        last_toggle_us = time_us_64() - half_period_us;
+        last_toggle_us = systime_us() - half_period_us;
         break;
     }
 }
@@ -94,7 +77,7 @@ void led_task_handle(void)
     case LED_STATE_ON:
         break;
     case LED_STATE_BLINK:
-        if (period_elapsed(&last_toggle_us, half_period_us))
+        if (systime_period_elapsed(&last_toggle_us, half_period_us))
         {
             gpio_put(PICO_DEFAULT_LED_PIN, !gpio_get(PICO_DEFAULT_LED_PIN));
         }
