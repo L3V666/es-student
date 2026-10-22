@@ -1,5 +1,6 @@
 #include "api.h"
 #include "device.h"
+#include "led-task.h"
 #include "profiling.h"
 #include "pico/stdlib.h"
 #include <stdio.h>
@@ -93,7 +94,66 @@ static void cmd_main_time_reset(const command_t *command)
     printf("max reset\n");
 }
 
+static void print_led_state(void)
+{
+    const char *state = "off";
+    switch (led_task_get_state())
+    {
+    case LED_STATE_OFF:
+        state = "off";
+        break;
+    case LED_STATE_ON:
+        state = "on";
+        break;
+    case LED_STATE_BLINK:
+        state = "blink";
+        break;
+    }
+    printf("led: %s, period %u ms\n", state, (unsigned)led_task_get_period_ms());
+}
+
+static void cmd_led_enable(const command_t *command)
+{
+    (void)command;
+    led_task_set_state(LED_STATE_ON);
+    print_led_state();
+}
+
+static void cmd_led_disable(const command_t *command)
+{
+    (void)command;
+    led_task_set_state(LED_STATE_OFF);
+    print_led_state();
+}
+
+static void cmd_led_blink(const command_t *command)
+{
+    (void)command;
+    led_task_set_state(LED_STATE_BLINK);
+    print_led_state();
+}
+
+static void cmd_led_period(const command_t *command)
+{
+    uint32_t period_ms;
+    if (command->argc != 1 || !parse_u32(command->argv[0], &period_ms))
+    {
+        printf("error: usage led_period <period_ms>\n");
+        return;
+    }
+    if (!led_task_set_period_ms(period_ms))
+    {
+        printf("error: period_ms must be greater than 0\n");
+        return;
+    }
+    print_led_state();
+}
+
 static const api_command_t api_commands[] = {
+    {"led_enable", "turn led on", cmd_led_enable},
+    {"led_disable", "turn led off", cmd_led_disable},
+    {"led_blink", "blink led", cmd_led_blink},
+    {"led_period", "set blink period: led_period <period_ms>", cmd_led_period},
     {"info", "device passport", cmd_info},
     {"uptime", "time since reset", cmd_uptime},
     {"calc_pi", "calculate pi: calc_pi [terms]", cmd_calc_pi},
