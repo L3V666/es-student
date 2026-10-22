@@ -4,6 +4,7 @@
 #include "log.h"
 #include "device.h"
 #include "profiling.h"
+#include "pi-task.h"
 #include "stdio-text-protocol.h"
 #include "api.h"
 
@@ -21,6 +22,7 @@ int main(void)
         profiling_iteration();
         button_task_handle();
         led_task_handle();
+        pi_task_handle();
         const command_t *command = stdio_text_protocol_handle();
         if (command != NULL)
         {
