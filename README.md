@@ -25,3 +25,5 @@
 [![2.3.7 Железо и логика](https://github.com/L3V666/es-student/actions/workflows/check-2-3-7.yml/badge.svg)](https://github.com/L3V666/es-student/actions/workflows/check-2-3-7.yml)
 
 [![2.3.8 Приёмка прибора](https://github.com/L3V666/es-student/actions/workflows/check-2-3-8.yml/badge.svg)](https://github.com/L3V666/es-student/actions/workflows/check-2-3-8.yml)
+
+[![2.3.9 Изменение требований](https://github.com/L3V666/es-student/actions/workflows/check-2-3-9.yml/badge.svg)](https://github.com/L3V666/es-student/actions/workflows/check-2-3-9.yml)
