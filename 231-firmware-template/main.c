@@ -1,4 +1,5 @@
-#include "pico/stdlib.h"
+#include "platform/platform.h"
+#include <stddef.h>
 #include "led-task/led-task.h"
 #include "button-task/button-task.h"
 #include "logging/log.h"
@@ -18,9 +19,9 @@ typedef enum {
 
 int main(void)
 {
-    stdio_init_all();
+    platform_init();
     led_task_init();
-    button_task_init();
+    button_task_init(led_task_next_state);
     stdio_text_protocol_init();
     LOG_INF("%s %s\n", FIRMWARE_NAME, FIRMWARE_VERSION);
     profiling_stopwatch_init(STOPWATCH_LOOP, "loop");

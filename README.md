@@ -21,3 +21,5 @@
 [![2.3.5 Данные вместо печати](https://github.com/L3V666/es-student/actions/workflows/check-2-3-5.yml/badge.svg)](https://github.com/L3V666/es-student/actions/workflows/check-2-3-5.yml)
 
 [![2.3.6 Библиотеки](https://github.com/L3V666/es-student/actions/workflows/check-2-3-6.yml/badge.svg)](https://github.com/L3V666/es-student/actions/workflows/check-2-3-6.yml)
+
+[![2.3.7 Железо и логика](https://github.com/L3V666/es-student/actions/workflows/check-2-3-7.yml/badge.svg)](https://github.com/L3V666/es-student/actions/workflows/check-2-3-7.yml)

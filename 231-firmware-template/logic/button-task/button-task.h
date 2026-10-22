@@ -3,7 +3,9 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-void button_task_init(void);
+typedef void (*button_task_callback_t)(void);
+
+void button_task_init(button_task_callback_t on_press);
 void button_task_handle(void);
 
 // Подтверждённое состояние: при проверке отпускания кнопка ещё нажата.
