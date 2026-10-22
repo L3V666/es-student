@@ -38,6 +38,11 @@ void led_task_set_state(led_state_t state)
     }
 }
 
+void led_task_blink(void)
+{
+    led_task_set_state(LED_STATE_BLINK);
+}
+
 void led_task_next_state(void)
 {
     switch (led_state)

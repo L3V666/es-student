@@ -6,7 +6,10 @@
 
 typedef void (*button_task_callback_t)(void);
 
-void button_task_init(platform_button_t button, button_task_callback_t on_press);
+// С on_long_press короткое действие вызывается после подтверждённого отпускания.
+// Без on_long_press действие вызывается сразу после подтверждённого нажатия.
+void button_task_init(platform_button_t button, button_task_callback_t on_press,
+                      button_task_callback_t on_long_press);
 void button_task_handle(void);
 
 // Подтверждённое состояние: при проверке отпускания кнопка ещё нажата.
