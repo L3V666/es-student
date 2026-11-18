@@ -3,6 +3,12 @@
 #include "hardware/adc.h"
 #include "hardware/dma.h"
 #include "hardware/irq.h"
+#include "hardware/clocks.h"
+#include "hardware/pwm.h"
+
+// Генератор испытательного сигнала: счётчик ШИМ считает микросекунды.
+#define TONE_PIN 20
+#define TONE_COUNT_HZ 1000000
 
 // Вход АЦП: GP26, канал 0.
 #define ADC_PIN 26
@@ -270,6 +276,13 @@ void platform_init(void)
     adc_init();
     adc_gpio_init(ADC_PIN);
     adc_set_temp_sensor_enabled(true);
+    gpio_set_function(TONE_PIN, GPIO_FUNC_PWM);
+    uint tone_slice = pwm_gpio_to_slice_num(TONE_PIN);
+    pwm_config tone_config = pwm_get_default_config();
+    pwm_config_set_clkdiv(&tone_config, (float)clock_get_hz(clk_sys) / TONE_COUNT_HZ);
+    pwm_init(tone_slice, &tone_config, false);
+    pwm_set_gpio_level(TONE_PIN, 0);
+    pwm_set_enabled(tone_slice, true);
     // канал блока сообщает о конце через DMA_IRQ_1
     block_channel = dma_claim_unused_channel(true);
     dma_channel_set_irq1_enabled(block_channel, true);
@@ -284,6 +297,24 @@ void platform_init(void)
 void platform_led_set(bool on)
 {
     gpio_put(LED_PIN, on);
+}
+
+bool platform_tone_set(uint32_t freq_hz)
+{
+    if (freq_hz == 0)
+    {
+        pwm_set_gpio_level(TONE_PIN, 0);
+        return true;
+    }
+    if (freq_hz < 20 || freq_hz > 20000)
+    {
+        return false;
+    }
+    uint32_t period_us = TONE_COUNT_HZ / freq_hz;
+    // ШИМ применяет новые значения при завершении текущего периода.
+    pwm_set_wrap(pwm_gpio_to_slice_num(TONE_PIN), (uint16_t)(period_us - 1));
+    pwm_set_gpio_level(TONE_PIN, (uint16_t)(period_us / 2));
+    return true;
 }
 
 void platform_charge_set(bool on)

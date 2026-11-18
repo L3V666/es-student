@@ -10,6 +10,8 @@ uint32_t platform_blink_stop(void);
 
 void platform_init(void);
 void platform_led_set(bool on);
+// Меандр на GP20: 20..20000 Гц; 0 — выключить, оставив на выводе ноль.
+bool platform_tone_set(uint32_t freq_hz);
 // true — заряд RC-цепи с GP22, false — разряд через резистор.
 void platform_charge_set(bool on);
 // Текущий уровень кнопки без подавления дребезга.

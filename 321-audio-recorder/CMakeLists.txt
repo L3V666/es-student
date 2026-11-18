@@ -31,6 +31,8 @@ target_link_libraries(platform PRIVATE
     pico_stdlib
     hardware_adc
     hardware_dma
+    hardware_pwm
+    hardware_clocks
 )
 
 # Логика прибора: заголовки SDK сюда не передаются.
