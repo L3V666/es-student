@@ -187,7 +187,14 @@ static void cmd_get_voltage(const command_t *command)
     printf("voltage: %.3f V\n", platform_voltage_read());
 }
 
+static void cmd_get_temp(const command_t *command)
+{
+    (void)command;
+    printf("temp: %.1f C\n", platform_temp_read());
+}
+
 const api_command_t api_commands[] = {
+    {"get_temp", "chip temperature, degrees Celsius", cmd_get_temp},
     {"get_voltage", "voltage on GP26, ADC input 0", cmd_get_voltage},
     {"button", "button state and press count", cmd_button},
     {"led_enable", "turn led on", cmd_led_enable},
