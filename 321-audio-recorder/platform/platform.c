@@ -103,3 +103,99 @@ float platform_temp_read(void)
     float voltage = adc_read() * ADC_VREF_V / ADC_LEVELS;
     return 27.0f - (voltage - 0.706f) / 0.001721f;
 }
+
+typedef enum {
+    ADC_FREE,
+    ADC_CAPTURE,
+} adc_user_t;
+
+static volatile adc_user_t adc_user;
+static repeating_timer_t capture_timer;
+static uint16_t capture_samples[PLATFORM_CAPTURE_MAX];
+static uint32_t capture_times[PLATFORM_CAPTURE_MAX];
+static uint32_t capture_count;
+static uint32_t capture_period_us;
+static volatile uint32_t capture_index;
+static volatile uint32_t capture_handler_us;
+
+static bool on_capture(repeating_timer_t *timer)
+{
+    (void)timer;
+    uint32_t start_us = time_us_32();
+    capture_times[capture_index] = start_us;
+    capture_samples[capture_index] = adc_read();
+    capture_index++;
+    capture_handler_us += time_us_32() - start_us;
+    if (capture_index < capture_count)
+    {
+        return true;
+    }
+    adc_user = ADC_FREE;
+    return false;
+}
+
+bool platform_adc_busy(void)
+{
+    return adc_user != ADC_FREE;
+}
+
+bool platform_capture_start(uint32_t count, uint32_t period_us)
+{
+    if (platform_adc_busy() || count == 0 || count > PLATFORM_CAPTURE_MAX || period_us < 10)
+    {
+        return false;
+    }
+    adc_select_input(ADC_CHANNEL);
+    capture_count = count;
+    capture_period_us = period_us;
+    capture_index = 0;
+    capture_handler_us = 0;
+    adc_user = ADC_CAPTURE;
+    if (!add_repeating_timer_us(-(int64_t)period_us, on_capture, NULL, &capture_timer))
+    {
+        adc_user = ADC_FREE;
+        capture_count = 0;
+        return false;
+    }
+    return true;
+}
+
+bool platform_capture_done(void)
+{
+    return !platform_adc_busy() && capture_count != 0 && capture_index == capture_count;
+}
+
+void platform_capture_get(platform_capture_t *capture)
+{
+    *capture = (platform_capture_t){0};
+    if (!platform_capture_done())
+    {
+        return;
+    }
+    capture->samples = capture_samples;
+    capture->count = capture_count;
+    capture->period_us = capture_period_us;
+    if (capture_count < 2)
+    {
+        return;
+    }
+    capture->min_interval_us = UINT32_MAX;
+    for (uint32_t i = 1; i < capture_count; i++)
+    {
+        uint32_t interval = capture_times[i] - capture_times[i - 1];
+        if (interval < capture->min_interval_us)
+        {
+            capture->min_interval_us = interval;
+        }
+        if (interval > capture->max_interval_us)
+        {
+            capture->max_interval_us = interval;
+        }
+    }
+    // Разности беззнаковых меток корректны и при переполнении таймера.
+    uint32_t elapsed_us = capture_times[capture_count - 1] - capture_times[0];
+    if (elapsed_us != 0)
+    {
+        capture->handler_percent = 100.0f * capture_handler_us / elapsed_us;
+    }
+}
