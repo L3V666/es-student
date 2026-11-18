@@ -17,7 +17,7 @@ add_subdirectory(../libs ${CMAKE_BINARY_DIR}/libs)
 # 0 — вызовы секундомеров исключены, 1 — профилирование включено.
 target_compile_definitions(profiling PUBLIC
     PROFILING_ENABLED=1
-    PROFILING_STOPWATCH_COUNT=7
+    PROFILING_STOPWATCH_COUNT=8
 )
 
 # Железо прибора: SDK доступен только реализации platform.
@@ -42,6 +42,7 @@ add_library(logic STATIC
     logic/pi-task/pi-task.c
     logic/telemetry-task/telemetry-task.c
     logic/block-task/block-task.c
+    logic/stream-task/stream-task.c
 )
 target_include_directories(logic PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/logic
