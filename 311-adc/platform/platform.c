@@ -9,6 +9,9 @@
 // Встроенный датчик температуры — канал 4.
 #define ADC_TEMP_CHANNEL 4
 
+// Вывод заряда RC-цепи через резистор.
+#define CHARGE_PIN 22
+
 // Опорное напряжение и число уровней 12-разрядного АЦП.
 #define ADC_VREF_V 3.3f
 #define ADC_LEVELS 4096
@@ -25,6 +28,9 @@ void platform_init(void)
     gpio_init(BUTTON_PIN);
     gpio_set_dir(BUTTON_PIN, GPIO_IN);
     gpio_pull_up(BUTTON_PIN);
+    gpio_init(CHARGE_PIN);
+    gpio_put(CHARGE_PIN, false);
+    gpio_set_dir(CHARGE_PIN, GPIO_OUT);
     adc_init();
     adc_gpio_init(ADC_PIN);
     adc_set_temp_sensor_enabled(true);
@@ -33,6 +39,11 @@ void platform_init(void)
 void platform_led_set(bool on)
 {
     gpio_put(LED_PIN, on);
+}
+
+void platform_charge_set(bool on)
+{
+    gpio_put(CHARGE_PIN, on);
 }
 
 bool platform_button_read(void)

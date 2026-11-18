@@ -226,7 +226,23 @@ static void cmd_tm_stop(const command_t *command)
     printf("telemetry: stopped\n");
 }
 
+static void cmd_charge_on(const command_t *command)
+{
+    (void)command;
+    platform_charge_set(true);
+    printf("charge: on\n");
+}
+
+static void cmd_charge_off(const command_t *command)
+{
+    (void)command;
+    platform_charge_set(false);
+    printf("charge: off\n");
+}
+
 const api_command_t api_commands[] = {
+    {"charge_on", "charge RC circuit through GP22", cmd_charge_on},
+    {"charge_off", "discharge RC circuit through GP22", cmd_charge_off},
     {"tm_start", "start telemetry: tm_start [<period_ms>]", cmd_tm_start},
     {"tm_stop", "stop telemetry", cmd_tm_stop},
     {"get_temp", "chip temperature, degrees Celsius", cmd_get_temp},
