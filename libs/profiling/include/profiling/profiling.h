@@ -3,7 +3,9 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#ifndef PROFILING_STOPWATCH_COUNT
 #define PROFILING_STOPWATCH_COUNT 5
+#endif
 
 #ifndef PROFILING_ENABLED
 #define PROFILING_ENABLED 1

@@ -33,3 +33,5 @@
 [![3.1.1 Измерение напряжения](https://github.com/L3V666/es-student/actions/workflows/check-3-1-1.yml/badge.svg)](https://github.com/L3V666/es-student/actions/workflows/check-3-1-1.yml)
 
 [![3.1.2 Измерение температуры](https://github.com/L3V666/es-student/actions/workflows/check-3-1-2.yml/badge.svg)](https://github.com/L3V666/es-student/actions/workflows/check-3-1-2.yml)
+
+[![3.1.3 Телеметрия измерений](https://github.com/L3V666/es-student/actions/workflows/check-3-1-3.yml/badge.svg)](https://github.com/L3V666/es-student/actions/workflows/check-3-1-3.yml)
