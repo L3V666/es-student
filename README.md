@@ -35,3 +35,5 @@
 [![3.1.2 Измерение температуры](https://github.com/L3V666/es-student/actions/workflows/check-3-1-2.yml/badge.svg)](https://github.com/L3V666/es-student/actions/workflows/check-3-1-2.yml)
 
 [![3.1.3 Телеметрия измерений](https://github.com/L3V666/es-student/actions/workflows/check-3-1-3.yml/badge.svg)](https://github.com/L3V666/es-student/actions/workflows/check-3-1-3.yml)
+
+[![3.1.4 Считывание данных в Python](https://github.com/L3V666/es-student/actions/workflows/check-3-1-4.yml/badge.svg)](https://github.com/L3V666/es-student/actions/workflows/check-3-1-4.yml)
