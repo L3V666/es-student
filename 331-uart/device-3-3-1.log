@@ -1,0 +1,52 @@
+задание: 3.3.1
+проект: 331-uart
+конденсатор, мкФ: 4.7
+устройство: 2e8a:000a
+серийный номер: 5303284718A63B9C
+порт: /dev/ttyACM0
+начало: 2026-11-19T03:18:09
+   0.000 --> 
+   0.503 --> help
+   0.504 <-- help
+   0.504 <-- help             list of commands
+   0.504 <-- edge             rise and fall of the RC line: edge pp|od
+   0.504 <-- button           button state and press count
+   0.504 <-- led_enable       turn led on
+   0.504 <-- led_disable      turn led off
+   0.504 <-- led_blink        blink led
+   0.504 <-- led_period       set blink period: led_period <period_ms>
+   0.504 <-- info             device passport
+   0.504 <-- uptime           time since reset
+   0.505 <-- pi_start         start pi calculation: pi_start [<terms>]
+   0.505 <-- pi               pi result or calculation state
+   0.555 <-- profiling        stopwatch counts, means and maxima
+   0.555 <-- profiling_reset  reset all stopwatch results
+   1.510 --> info
+   1.560 <-- info
+   1.560 <-- name: es-uart
+   1.560 <-- version: 1.0.0
+   1.560 <-- project: 331-uart
+   1.560 <-- repo: https://github.com/L3V666/es-student
+   1.560 <-- board: pico
+   1.560 <-- serial: 5303284718A63B9C
+   1.560 <-- chip: manufacturer 0x927, part 0x0002, revision 2
+   1.560 <-- pico-sdk: 2.3.0
+   2.512 --> edge pp
+   2.562 <-- edge pp
+   4.519 <-- edge pp: timeout
+   5.524 --> edge od
+   5.575 <-- edge od
+   7.534 <-- edge od: timeout
+  10.548 --> edge pp
+  10.599 <-- edge pp
+  12.557 <-- edge pp: timeout
+  13.563 --> edge od
+  13.613 <-- edge od
+  15.573 <-- edge od: timeout
+  18.587 --> edge xx
+  18.638 <-- edge xx
+  18.638 <-- error: usage edge pp|od
+  19.089 --> edge
+  19.139 <-- edge
+  19.139 <-- error: usage edge pp|od
+итог: отправлено кадров 9, принято строк 35

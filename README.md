@@ -53,3 +53,5 @@
 [![3.2.6 Сторожевой таймер](https://github.com/L3V666/es-student/actions/workflows/check-3-2-6.yml/badge.svg)](https://github.com/L3V666/es-student/actions/workflows/check-3-2-6.yml)
 
 [![3.2.7 Запись звука](https://github.com/L3V666/es-student/actions/workflows/check-3-2-7.yml/badge.svg)](https://github.com/L3V666/es-student/actions/workflows/check-3-2-7.yml)
+
+[![3.3.1 Драйверы линии](https://github.com/L3V666/es-student/actions/workflows/check-3-3-1.yml/badge.svg)](https://github.com/L3V666/es-student/actions/workflows/check-3-3-1.yml)
