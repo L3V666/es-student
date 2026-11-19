@@ -5,6 +5,11 @@
 #include "hardware/irq.h"
 #include "hardware/clocks.h"
 #include "hardware/pwm.h"
+#include "hardware/watchdog.h"
+
+#define WATCHDOG_MAX_MS 8388
+static bool watchdog_reset;
+static uint32_t watchdog_restarts;
 
 // Генератор испытательного сигнала: счётчик ШИМ считает микросекунды.
 #define TONE_PIN 20
@@ -263,6 +268,18 @@ uint32_t platform_stream_overruns(void)
 
 void platform_init(void)
 {
+    // Scratch 0 сохраняется при сбросе по watchdog; scratch 4..7 использует SDK.
+    watchdog_reset = watchdog_enable_caused_reboot();
+    if (watchdog_reset)
+    {
+        watchdog_hw->scratch[0]++;
+    }
+    else
+    {
+        watchdog_hw->scratch[0] = 0;
+    }
+    watchdog_restarts = watchdog_hw->scratch[0];
+
     stdio_init_all();
     gpio_init(LED_PIN);
     gpio_set_dir(LED_PIN, GPIO_OUT);
@@ -297,6 +314,27 @@ void platform_init(void)
 void platform_led_set(bool on)
 {
     gpio_put(LED_PIN, on);
+}
+
+bool platform_watchdog_enable(uint32_t timeout_ms)
+{
+    if (timeout_ms == 0 || timeout_ms > WATCHDOG_MAX_MS)
+    {
+        return false;
+    }
+    watchdog_enable(timeout_ms, true);
+    return true;
+}
+
+void platform_watchdog_feed(void)
+{
+    watchdog_update();
+}
+
+bool platform_watchdog_caused_reset(uint32_t *restarts)
+{
+    *restarts = watchdog_restarts;
+    return watchdog_reset;
 }
 
 bool platform_tone_set(uint32_t freq_hz)

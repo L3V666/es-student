@@ -77,6 +77,8 @@ int main(void)
         stream_task_handle();
         profiling_stop(STOPWATCH_STREAM);
 
+        // Все задачи вернули управление — суперцикл жив.
+        platform_watchdog_feed();
         profiling_stop(STOPWATCH_LOOP);
     }
 }

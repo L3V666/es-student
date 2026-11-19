@@ -49,3 +49,5 @@
 [![3.2.4 Поток с двойной буферизацией](https://github.com/L3V666/es-student/actions/workflows/check-3-2-4.yml/badge.svg)](https://github.com/L3V666/es-student/actions/workflows/check-3-2-4.yml)
 
 [![3.2.5 Запись испытательного сигнала](https://github.com/L3V666/es-student/actions/workflows/check-3-2-5.yml/badge.svg)](https://github.com/L3V666/es-student/actions/workflows/check-3-2-5.yml)
+
+[![3.2.6 Сторожевой таймер](https://github.com/L3V666/es-student/actions/workflows/check-3-2-6.yml/badge.svg)](https://github.com/L3V666/es-student/actions/workflows/check-3-2-6.yml)

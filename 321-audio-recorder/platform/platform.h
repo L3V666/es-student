@@ -9,6 +9,11 @@ bool platform_blink_start(uint32_t period_ms);
 uint32_t platform_blink_stop(void);
 
 void platform_init(void);
+// Таймаут 1..8388 мс; обновление только после всех задач суперцикла.
+bool platform_watchdog_enable(uint32_t timeout_ms);
+void platform_watchdog_feed(void);
+// Причина последнего сброса и число последовательных сбросов по watchdog.
+bool platform_watchdog_caused_reset(uint32_t *restarts);
 void platform_led_set(bool on);
 // Меандр на GP20: 20..20000 Гц; 0 — выключить, оставив на выводе ноль.
 bool platform_tone_set(uint32_t freq_hz);
