@@ -76,3 +76,6 @@ uint32_t platform_stream_overruns(void);
 
 // отправляет байты в порт как есть, без замены \n на \r\n
 void platform_write(const void *data, uint32_t bytes);
+
+// Перевод кода АЦП (в том числе дробного) в вольты.
+float platform_adc_volts(float code);

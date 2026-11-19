@@ -52,7 +52,7 @@ target_include_directories(logic PUBLIC
 )
 target_link_libraries(logic
     PUBLIC stdio_text_protocol
-    PRIVATE platform systime profiling device
+    PRIVATE platform systime profiling device m
 )
 
 add_executable(${PROJECT_NAME}

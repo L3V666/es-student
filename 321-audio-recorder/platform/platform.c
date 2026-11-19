@@ -482,3 +482,8 @@ uint32_t platform_block_time_us(void)
 {
     return block_end_us - block_start_us;
 }
+
+float platform_adc_volts(float code)
+{
+    return code * ADC_VREF_V / ADC_LEVELS;
+}
