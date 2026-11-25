@@ -21,3 +21,6 @@ bool uart_task_start(platform_uart_t tx, platform_uart_t rx, const uint8_t *data
 
 // вызывается на каждой итерации суперцикла, не ждёт
 void uart_task_handle(void);
+
+// Пока идёт обмен, менять скорость, чётность и петлю нельзя.
+bool uart_task_busy(void);

@@ -23,6 +23,11 @@ static size_t tx_sent;
 static uint64_t quiet_start_us;
 static uart_task_callback_t callback;
 
+bool uart_task_busy(void)
+{
+    return state != UART_STATE_IDLE;
+}
+
 bool uart_task_start(platform_uart_t tx, platform_uart_t rx, const uint8_t *data, size_t size,
                      uart_task_callback_t on_done)
 {
