@@ -12,6 +12,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include "edge-task/edge-task.h"
+#include "uart-task/uart-task.h"
+
+#define ECHO_TEXT_MAX 32
 
 static bool parse_u32(const char *text, uint32_t *value)
 {
@@ -216,7 +219,79 @@ static void cmd_edge(const command_t *command)
     }
 }
 
+static void print_bytes(const uint8_t *data, size_t size)
+{
+    for (size_t i = 0; i < size; i++)
+    {
+        putchar(isprint((unsigned char)data[i]) ? data[i] : '.');
+    }
+}
+
+static void print_errors(uint32_t errors)
+{
+    printf("err:");
+    if (errors == 0)
+    {
+        printf(" none");
+    }
+    if (errors & PLATFORM_UART_FE) printf(" FE");
+    if (errors & PLATFORM_UART_PE) printf(" PE");
+    if (errors & PLATFORM_UART_BE) printf(" BE");
+    if (errors & PLATFORM_UART_OE) printf(" OE");
+}
+
+static void print_echo(const uint8_t *data, size_t size, uint32_t errors)
+{
+    printf("rx: ");
+    print_bytes(data, size);
+    printf(" ");
+    print_errors(errors);
+    printf("\n");
+}
+
+static void cmd_loop(const command_t *command)
+{
+    bool internal;
+    if (command->argc == 1 && strcmp(command->argv[0], "internal") == 0)
+    {
+        internal = true;
+    }
+    else if (command->argc == 1 && strcmp(command->argv[0], "pins") == 0)
+    {
+        internal = false;
+    }
+    else
+    {
+        printf("error: usage loop internal|pins\n");
+        return;
+    }
+    platform_uart_loop_set(internal);
+    printf("loop: %s\n", command->argv[0]);
+}
+
+static void cmd_echo(const command_t *command)
+{
+    if (command->argc != 1)
+    {
+        printf("error: usage echo <text>\n");
+        return;
+    }
+    size_t size = strlen(command->argv[0]);
+    if (size > ECHO_TEXT_MAX)
+    {
+        printf("error: text longer than 32\n");
+        return;
+    }
+    if (!uart_task_start(PLATFORM_UART0, PLATFORM_UART0,
+                         (const uint8_t *)command->argv[0], size, print_echo))
+    {
+        printf("error: uart is busy\n");
+    }
+}
+
 const api_command_t api_commands[] = {
+    {"loop", "UART0 loopback: loop internal|pins", cmd_loop},
+    {"echo", "text through UART0 and back: echo <text>", cmd_echo},
     {"edge", "rise and fall of the RC line: edge pp|od", cmd_edge},
     {"button", "button state and press count", cmd_button},
     {"led_enable", "turn led on", cmd_led_enable},
