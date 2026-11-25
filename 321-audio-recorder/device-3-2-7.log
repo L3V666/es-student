@@ -3,67 +3,67 @@
 устройство: 2e8a:000a
 серийный номер: 5303284718A63B9C
 порт: /dev/ttyACM0
-начало: 2026-11-19T03:10:56
+начало: 2026-11-25T23:26:43
    0.000 --> 
-   0.501 --> help
-   0.503 <-- help
-   0.503 <-- help             list of commands
-   0.503 <-- mic_bias         microphone DC bias in volts
-   0.503 <-- mic_level        microphone level: mic_level [<ms>]
-   0.503 <-- wdt_enable       enable watchdog: wdt_enable <timeout_ms>
-   0.503 <-- hang             stop superloop to test watchdog reset
-   0.503 <-- reset_reason     last reset reason and watchdog restart count
-   0.504 <-- generate_tone    generate PWM tone: generate_tone <Hz>, 0 to stop
-   0.504 <-- stream_start     start ADC stream: stream_start [8|16]
-   0.504 <-- stream_stop      stop ADC stream and print totals
-   0.504 <-- dma_cap          capture ADC block through DMA: dma_cap <N>
-   0.504 <-- cap_start        capture ADC samples: cap_start <N> <period_us>
-   0.504 <-- cap_dump         print captured samples and timing
-   0.504 <-- timer_blink_start blink led by timer: timer_blink_start <period_ms>
-   0.505 <-- timer_blink_stop stop timer blink, number of toggles
-   0.505 <-- charge_on        charge RC circuit through GP22
-   0.505 <-- charge_off       discharge RC circuit through GP22
-   0.505 <-- tm_start         start telemetry: tm_start [<period_ms>]
-   0.505 <-- tm_stop          stop telemetry
-   0.505 <-- get_temp         chip temperature, degrees Celsius
-   0.505 <-- get_voltage      voltage on GP26, ADC input 0
-   0.505 <-- button           button state and press count
-   0.505 <-- led_enable       turn led on
-   0.505 <-- led_disable      turn led off
-   0.505 <-- led_blink        blink led
-   0.505 <-- led_period       set blink period: led_period <period_ms>
-   0.506 <-- info             device passport
-   0.506 <-- uptime           time since reset
-   0.506 <-- pi_start         start pi calculation: pi_start [<terms>]
-   0.506 <-- pi               pi result or calculation state
-   0.506 <-- profiling        stopwatch counts, means and maxima
-   0.556 <-- profiling_reset  reset all stopwatch results
-   1.512 --> info
-   1.562 <-- info
-   1.562 <-- name: es-recorder
-   1.562 <-- version: 1.0.0
-   1.562 <-- project: 321-audio-recorder
-   1.562 <-- repo: https://github.com/L3V666/es-student
-   1.562 <-- board: pico
-   1.562 <-- serial: 5303284718A63B9C
-   1.562 <-- chip: manufacturer 0x927, part 0x0002, revision 2
-   1.562 <-- pico-sdk: 2.3.0
-   2.516 --> mic_bias
-   2.566 <-- mic_bias
-   2.666 <-- mic: bias 0.754 V
-   3.018 --> mic_level
-   3.068 <-- mic_level
-   3.168 <-- mic: level 8.6 mV rms, peak 258.6 mV, 100 ms
-   3.519 --> mic_level 50
-   3.570 <-- mic_level 50
-   3.620 <-- mic: level 9.7 mV rms, peak 210.3 mV, 50 ms
-   4.020 --> mic_level 185
-   4.071 <-- mic_level 185
-   4.221 <-- mic: level 5.4 mV rms, peak 193.4 mV, 184 ms
-   4.522 --> mic_level 0
-   4.572 <-- mic_level 0
-   4.572 <-- error: ms must be 1..185
-   5.023 --> mic_level 200
-   5.073 <-- mic_level 200
-   5.073 <-- error: ms must be 1..185
+   0.503 --> help
+   0.505 <-- help
+   0.505 <-- help             list of commands
+   0.505 <-- mic_bias         microphone DC bias in volts
+   0.505 <-- mic_level        microphone level: mic_level [<ms>]
+   0.505 <-- wdt_enable       enable watchdog: wdt_enable <timeout_ms>
+   0.505 <-- hang             stop superloop to test watchdog reset
+   0.505 <-- reset_reason     last reset reason and watchdog restart count
+   0.505 <-- generate_tone    generate PWM tone: generate_tone <Hz>, 0 to stop
+   0.505 <-- stream_start     start ADC stream: stream_start [8|16]
+   0.505 <-- stream_stop      stop ADC stream and print totals
+   0.506 <-- dma_cap          capture ADC block through DMA: dma_cap <N>
+   0.506 <-- cap_start        capture ADC samples: cap_start <N> <period_us>
+   0.506 <-- cap_dump         print captured samples and timing
+   0.506 <-- timer_blink_start blink led by timer: timer_blink_start <period_ms>
+   0.506 <-- timer_blink_stop stop timer blink, number of toggles
+   0.506 <-- charge_on        charge RC circuit through GP22
+   0.506 <-- charge_off       discharge RC circuit through GP22
+   0.506 <-- tm_start         start telemetry: tm_start [<period_ms>]
+   0.506 <-- tm_stop          stop telemetry
+   0.507 <-- get_temp         chip temperature, degrees Celsius
+   0.507 <-- get_voltage      voltage on GP26, ADC input 0
+   0.507 <-- button           button state and press count
+   0.507 <-- led_enable       turn led on
+   0.507 <-- led_disable      turn led off
+   0.507 <-- led_blink        blink led
+   0.507 <-- led_period       set blink period: led_period <period_ms>
+   0.508 <-- info             device passport
+   0.508 <-- uptime           time since reset
+   0.508 <-- pi_start         start pi calculation: pi_start [<terms>]
+   0.508 <-- pi               pi result or calculation state
+   0.508 <-- profiling        stopwatch counts, means and maxima
+   0.558 <-- profiling_reset  reset all stopwatch results
+   1.513 --> info
+   1.563 <-- info
+   1.563 <-- name: es-recorder
+   1.563 <-- version: 1.0.0
+   1.563 <-- project: 321-audio-recorder
+   1.563 <-- repo: https://github.com/L3V666/es-student
+   1.563 <-- board: pico
+   1.563 <-- serial: 5303284718A63B9C
+   1.563 <-- chip: manufacturer 0x927, part 0x0002, revision 2
+   1.563 <-- pico-sdk: 2.3.0
+   2.518 --> mic_bias
+   2.568 <-- mic_bias
+   2.669 <-- mic: bias 0.754 V
+   3.021 --> mic_level
+   3.071 <-- mic_level
+   3.172 <-- mic: level 200.6 mV rms, peak 746.0 mV, 100 ms
+   3.524 --> mic_level 50
+   3.574 <-- mic_level 50
+   3.624 <-- mic: level 200.8 mV rms, peak 725.9 mV, 50 ms
+   4.026 --> mic_level 185
+   4.077 <-- mic_level 185
+   4.227 <-- mic: level 208.5 mV rms, peak 1528.3 mV, 184 ms
+   4.529 --> mic_level 0
+   4.579 <-- mic_level 0
+   4.579 <-- error: ms must be 1..185
+   5.032 --> mic_level 200
+   5.082 <-- mic_level 200
+   5.082 <-- error: ms must be 1..185
 итог: отправлено кадров 9, принято строк 53
