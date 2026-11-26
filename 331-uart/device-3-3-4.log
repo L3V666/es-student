@@ -1,0 +1,64 @@
+задание: 3.3.4
+проект: 331-uart
+устройство: 2e8a:000a
+серийный номер: 5303284718A63B9C
+порт: /dev/ttyACM0
+начало: 2026-11-26T11:51:28
+   0.000 --> 
+   0.503 --> help
+   0.504 <-- help
+   0.504 <-- help             list of commands
+   0.504 <-- block            64 bytes from UART1 to UART0: block irq|poll
+   0.504 <-- link             text from UART0 to UART1 and back: link <text>
+   0.504 <-- baud_shift       shift UART1 baud rate: baud_shift <percent>
+   0.505 <-- text             32 characters from UART1 to UART0
+   0.505 <-- parity           parity of UART0 and UART1: parity <rx> <tx>
+   0.505 <-- loop             UART0 loopback: loop internal|pins
+   0.505 <-- echo             text through UART0 and back: echo <text>
+   0.505 <-- edge             rise and fall of the RC line: edge pp|od
+   0.505 <-- button           button state and press count
+   0.505 <-- led_enable       turn led on
+   0.505 <-- led_disable      turn led off
+   0.505 <-- led_blink        blink led
+   0.505 <-- led_period       set blink period: led_period <period_ms>
+   0.505 <-- info             device passport
+   0.555 <-- uptime           time since reset
+   0.556 <-- pi_start         start pi calculation: pi_start [<terms>]
+   0.556 <-- pi               pi result or calculation state
+   0.556 <-- profiling        stopwatch counts, means and maxima
+   0.556 <-- profiling_reset  reset all stopwatch results
+   1.510 --> info
+   1.560 <-- info
+   1.560 <-- name: es-uart
+   1.560 <-- version: 1.0.0
+   1.560 <-- project: 331-uart
+   1.560 <-- repo: https://github.com/L3V666/es-student
+   1.560 <-- board: pico
+   1.560 <-- serial: 5303284718A63B9C
+   1.560 <-- chip: manufacturer 0x927, part 0x0002, revision 2
+   1.560 <-- pico-sdk: 2.3.0
+   2.514 --> loop pins
+   2.564 <-- loop pins
+   2.564 <-- loop: pins
+   3.016 --> parity none none
+   3.066 <-- parity none none
+   3.066 <-- parity: uart0 none, uart1 none
+   3.518 --> baud_shift 0
+   3.568 <-- baud_shift 0
+   3.568 <-- baud_shift: uart1 115207 baud
+   4.020 --> block irq
+   4.070 <-- block irq
+   4.070 <-- block irq: 64/64 match, err: none
+   4.522 --> block poll
+   4.573 <-- block poll
+   4.573 <-- block poll: 32/64 match, err: OE
+   5.025 --> block irq
+   5.076 <-- block irq
+   5.076 <-- block irq: 64/64 match, err: none
+   5.528 --> block poll
+   5.578 <-- block poll
+   5.578 <-- block poll: 32/64 match, err: OE
+   6.030 --> block xx
+   6.080 <-- block xx
+   6.080 <-- error: usage block irq|poll
+итог: отправлено кадров 11, принято строк 46
