@@ -2,6 +2,7 @@
 #include "pico/stdlib.h"
 #include "hardware/adc.h"
 #include "hardware/uart.h"
+#include "hardware/irq.h"
 
 #define LINE_PIN 22
 #define ADC_PIN 26
@@ -20,6 +21,22 @@ static const uint BUTTON_PIN = 15;
 #define UART1_RX_PIN 9
 
 #define UART_BAUD 115200
+
+#define RX_BUFFER_SIZE 128
+static volatile uint8_t rx_buffer[RX_BUFFER_SIZE];
+static volatile uint32_t rx_count;
+
+static void on_uart0_rx(void)
+{
+    while (uart_is_readable(uart0))
+    {
+        uint8_t byte = uart_get_hw(uart0)->dr & 0xff;
+        if (rx_count < RX_BUFFER_SIZE)
+        {
+            rx_buffer[rx_count++] = byte;
+        }
+    }
+}
 
 static uart_inst_t *uart_of(platform_uart_t uart)
 {
@@ -44,6 +61,9 @@ void platform_init(void)
     uart_init(uart1, UART_BAUD);
     gpio_set_function(UART1_TX_PIN, GPIO_FUNC_UART);
     gpio_set_function(UART1_RX_PIN, GPIO_FUNC_UART);
+    uart_set_irqs_enabled(uart0, false, false);
+    irq_set_exclusive_handler(UART0_IRQ, on_uart0_rx);
+    irq_set_enabled(UART0_IRQ, true);
 }
 
 void platform_led_set(bool on)
@@ -104,6 +124,16 @@ void platform_uart_clear(platform_uart_t uart)
 
     // запись в UARTECR сбрасывает признаки ошибок
     uart_get_hw(u)->rsr = 0;
+    if (uart == PLATFORM_UART0)
+    {
+        rx_count = 0;
+    }
+}
+
+void platform_uart_rx_irq_set(bool on)
+{
+    // Приём по порогу FIFO и по паузе, прерывание передачи выключено.
+    uart_set_irqs_enabled(uart0, on, false);
 }
 
 bool platform_uart_put(platform_uart_t uart, uint8_t byte)
@@ -129,6 +159,23 @@ size_t platform_uart_read(platform_uart_t uart, uint8_t *data, size_t size)
 {
     uart_inst_t *u = uart_of(uart);
     size_t n = 0;
+
+    // Задача читает после завершения передачи и 1 мс тишины на линии.
+    if (uart == PLATFORM_UART0)
+    {
+        uint32_t count = rx_count;
+        while (n < count && n < size)
+        {
+            data[n] = rx_buffer[n];
+            n++;
+        }
+        // Сохраняем непрочитанный хвост, если буфер вызывающего меньше.
+        for (uint32_t i = (uint32_t)n; i < count; i++)
+        {
+            rx_buffer[i - n] = rx_buffer[i];
+        }
+        rx_count = count - (uint32_t)n;
+    }
 
     while (uart_is_readable(u) && n < size)
     {

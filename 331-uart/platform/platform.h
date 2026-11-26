@@ -39,6 +39,9 @@ void platform_uart_loop_set(bool internal);
 // очередь приёма пуста, признаки ошибок сброшены
 void platform_uart_clear(platform_uart_t uart);
 
+// Приём UART0 в программный буфер обработчиком прерывания.
+void platform_uart_rx_irq_set(bool on);
+
 // кладёт байт в очередь передачи; false — очередь полна
 bool platform_uart_put(platform_uart_t uart, uint8_t byte);
 
