@@ -13,8 +13,11 @@
 #include <string.h>
 #include "edge-task/edge-task.h"
 #include "uart-task/uart-task.h"
+#include "block-task/block-task.h"
 
 #define ECHO_TEXT_MAX 32
+
+static bool scope_active;
 #define UART_BASE_BAUD 115200
 
 static const char text_line[] = "0123456789ABCDEFGHIJKLMNOPQRSTUV";
@@ -216,6 +219,11 @@ static void cmd_edge(const command_t *command)
         printf("error: usage edge pp|od\n");
         return;
     }
+    if (scope_active)
+    {
+        printf("error: adc busy\n");
+        return;
+    }
     if (!edge_task_start(mode, print_edge))
     {
         printf("error: edge is busy\n");
@@ -268,7 +276,7 @@ static void cmd_loop(const command_t *command)
         printf("error: usage loop internal|pins\n");
         return;
     }
-    if (uart_task_busy())
+    if (scope_active || uart_task_busy())
     {
         printf("error: uart is busy\n");
         return;
@@ -301,7 +309,7 @@ static void cmd_echo(const command_t *command)
     {
         return;
     }
-    if (!uart_task_start(PLATFORM_UART0, PLATFORM_UART0,
+    if (scope_active || !uart_task_start(PLATFORM_UART0, PLATFORM_UART0,
                          (const uint8_t *)command->argv[0], size, print_echo))
     {
         printf("error: uart is busy\n");
@@ -338,7 +346,7 @@ static void cmd_link(const command_t *command)
     {
         return;
     }
-    if (!uart_task_start(PLATFORM_UART0, PLATFORM_UART1,
+    if (scope_active || !uart_task_start(PLATFORM_UART0, PLATFORM_UART1,
                          (const uint8_t *)command->argv[0], size, print_link_forth))
     {
         printf("error: uart is busy\n");
@@ -373,7 +381,7 @@ static void cmd_baud_shift(const command_t *command)
         printf("error: percent must be -50..50\n");
         return;
     }
-    if (uart_task_busy())
+    if (scope_active || uart_task_busy())
     {
         printf("error: uart is busy\n");
         return;
@@ -399,7 +407,7 @@ static void cmd_text(const command_t *command)
         printf("error: usage text\n");
         return;
     }
-    if (!uart_task_start(PLATFORM_UART1, PLATFORM_UART0,
+    if (scope_active || !uart_task_start(PLATFORM_UART1, PLATFORM_UART0,
                          (const uint8_t *)text_line, sizeof(text_line) - 1, print_text))
     {
         printf("error: uart is busy\n");
@@ -424,7 +432,7 @@ static void cmd_parity(const command_t *command)
         printf("error: usage parity none|even|odd none|even|odd\n");
         return;
     }
-    if (uart_task_busy())
+    if (scope_active || uart_task_busy())
     {
         printf("error: uart is busy\n");
         return;
@@ -465,7 +473,7 @@ static void cmd_block(const command_t *command)
         return;
     }
     // Повторная команда не должна менять режим уже идущего обмена.
-    if (uart_task_busy())
+    if (scope_active || uart_task_busy())
     {
         printf("error: uart is busy\n");
         return;
@@ -484,7 +492,112 @@ static void cmd_block(const command_t *command)
     }
 }
 
+#define SCOPE_SAMPLES PLATFORM_BLOCK_MAX
+#define SCOPE_BAUD_MIN 9600
+#define SCOPE_TEXT_MAX 4
+
+static uint32_t scope_baud;
+static uint8_t scope_rx[UART_TASK_MAX];
+static size_t scope_rx_size;
+static uint32_t scope_rx_errors;
+static bool scope_rx_done;
+static bool scope_failed;
+static const uint16_t *scope_samples;
+static uint32_t scope_count;
+
+static void finish_scope(void)
+{
+    if (scope_samples == NULL || !scope_rx_done) return;
+    platform_uart_baud_set(PLATFORM_UART0, UART_BASE_BAUD);
+    platform_uart_baud_set(PLATFORM_UART1, UART_BASE_BAUD);
+    if (!scope_failed)
+    {
+        printf("scope: %u samples, %u Hz, %u baud, uart1 ",
+               (unsigned)scope_count, (unsigned)PLATFORM_SAMPLE_RATE_HZ,
+               (unsigned)scope_baud);
+        print_bytes(scope_rx, scope_rx_size);
+        printf(" ");
+        print_errors(scope_rx_errors);
+        printf("\n");
+        for (uint32_t i = 0; i < scope_count; i++)
+        {
+            printf("%u%c", (unsigned)scope_samples[i],
+                   ((i + 1) % 16 == 0 || i + 1 == scope_count) ? '\n' : ' ');
+        }
+        printf("scope: end\n");
+    }
+    scope_samples = NULL;
+    scope_active = false;
+}
+
+static void print_scope_rx(const uint8_t *data, size_t size, uint32_t errors)
+{
+    memcpy(scope_rx, data, size);
+    scope_rx_size = size;
+    scope_rx_errors = errors;
+    scope_rx_done = true;
+    finish_scope();
+}
+
+static void print_scope(const uint16_t *samples, uint32_t count, uint32_t time_us)
+{
+    (void)time_us;
+    scope_samples = samples;
+    scope_count = count;
+    // Обычно UART заканчивает первым; при задержке суперцикла ждём его callback.
+    finish_scope();
+}
+
+static void cmd_scope(const command_t *command)
+{
+    uint32_t baud;
+    if (command->argc != 2 || !parse_u32(command->argv[0], &baud) ||
+        baud < SCOPE_BAUD_MIN || baud > UART_BASE_BAUD ||
+        strlen(command->argv[1]) == 0 || strlen(command->argv[1]) > SCOPE_TEXT_MAX)
+    {
+        printf("error: usage scope <baud> <text>\n");
+        return;
+    }
+    if (scope_active || edge_task_busy())
+    {
+        printf("error: adc busy\n");
+        return;
+    }
+    if (uart_task_busy())
+    {
+        printf("error: uart is busy\n");
+        return;
+    }
+    platform_uart_baud_set(PLATFORM_UART0, baud);
+    platform_uart_baud_set(PLATFORM_UART1, baud);
+    scope_baud = baud;
+    scope_rx_size = 0;
+    scope_rx_errors = 0;
+    scope_rx_done = false;
+    scope_failed = false;
+    scope_samples = NULL;
+    scope_active = true;
+    if (!block_task_start(SCOPE_SAMPLES, print_scope))
+    {
+        scope_active = false;
+        platform_uart_baud_set(PLATFORM_UART0, UART_BASE_BAUD);
+        platform_uart_baud_set(PLATFORM_UART1, UART_BASE_BAUD);
+        printf("error: adc busy\n");
+        return;
+    }
+    if (!uart_task_start(PLATFORM_UART0, PLATFORM_UART1,
+                         (const uint8_t *)command->argv[1], strlen(command->argv[1]),
+                         print_scope_rx))
+    {
+        // DMA завершится самостоятельно; его callback восстановит скорость.
+        scope_failed = true;
+        scope_rx_done = true;
+        printf("error: uart is busy\n");
+    }
+}
+
 const api_command_t api_commands[] = {
+    {"scope", "UART0 line on ADC: scope <baud> <text>", cmd_scope},
     {"block", "64 bytes from UART1 to UART0: block irq|poll", cmd_block},
     {"link", "text from UART0 to UART1 and back: link <text>", cmd_link},
     {"baud_shift", "shift UART1 baud rate: baud_shift <percent>", cmd_baud_shift},

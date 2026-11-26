@@ -63,3 +63,5 @@
 [![3.3.4 Приём блока](https://github.com/L3V666/es-student/actions/workflows/check-3-3-4.yml/badge.svg)](https://github.com/L3V666/es-student/actions/workflows/check-3-3-4.yml)
 
 [![3.2.7д Запись в 8 бит](https://github.com/L3V666/es-student/actions/workflows/check-3-2-7d.yml/badge.svg)](https://github.com/L3V666/es-student/actions/workflows/check-3-2-7d.yml)
+
+[![3.3.5 Осциллограмма линии UART](https://github.com/L3V666/es-student/actions/workflows/check-3-3-5.yml/badge.svg)](https://github.com/L3V666/es-student/actions/workflows/check-3-3-5.yml)

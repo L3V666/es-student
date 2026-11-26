@@ -63,3 +63,11 @@ typedef enum {
 // Фактическая скорость после округления делителя.
 uint32_t platform_uart_baud_set(platform_uart_t uart, uint32_t baud);
 void platform_uart_parity_set(platform_uart_t uart, platform_parity_t parity);
+
+// 4096 отсчётов по 2 мкс: около 8,2 мс линии UART.
+#define PLATFORM_SAMPLE_RATE_HZ 500000
+#define PLATFORM_BLOCK_MAX 4096
+bool platform_block_start(uint32_t count);
+bool platform_block_done(void);
+const uint16_t *platform_block_samples(void);
+uint32_t platform_block_time_us(void);

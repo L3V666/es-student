@@ -22,6 +22,11 @@ static edge_task_callback_t done_callback;
 static uint64_t phase_start_us;
 static uint32_t rise_us;
 
+bool edge_task_busy(void)
+{
+    return state != EDGE_STATE_IDLE;
+}
+
 static void enter(edge_state_t next, bool high)
 {
     platform_line_set(line_mode, high);
